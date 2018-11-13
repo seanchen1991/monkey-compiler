@@ -2,9 +2,6 @@ use token::*;
 use std::iter::Peekable;
 use std::str::Chars;
 
-#[cfg(test)]
-mod tests;
-
 pub struct Lexer<'a> {
     input: Peekable<Chars<'a>>
 }
@@ -140,3 +137,6 @@ impl<'a> Iterator for Lexer<'a> {
 fn is_letter(ch: char) -> bool {
     ch.is_alphabetic() || ch == '_'
 }
+
+#[cfg(test)]
+mod tests;

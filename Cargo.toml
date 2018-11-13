@@ -1,9 +1,10 @@
 [package]
-name = "monkey"
+name = "monkey-compiler"
 version = "0.1.0"
-authors = ["Goh Jia Hao <jiahaog@gmail.com>"]
-description = "Interpreter for the Monkey programming language"
+authors = ["Sean Chen <seanchen11235@gmail.com>"]
+description = "Compiler for the Monkey programming language"
 license = "MIT"
 
-
 [dependencies]
+iota = "0.1.4"
+byteorder = "1"

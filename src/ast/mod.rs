@@ -3,9 +3,6 @@ use std::fmt;
 use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
 
-#[cfg(test)]
-mod tests;
-
 #[derive(Debug)]
 pub enum Node {
     Program(Box<Program>),
@@ -267,3 +264,6 @@ impl fmt::Display for Program {
         write!(f, "{}", statements.join(""))
     }
 }
+
+#[cfg(test)]
+mod tests;

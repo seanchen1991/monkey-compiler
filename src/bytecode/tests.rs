@@ -17,7 +17,8 @@ fn test_make_instruction() {
     for test in tests {
         let Instruction(instruction) = def.make_instruction(test.op, test.operands.as_slice()).expect("Expected instruction to be made");
         assert_eq!(instruction.len(), test.expected.len(), "Expected instruction length of {} but got {} instead", test.expected.len(), instruction.len());
-
+        println!("{:?}", instruction);
+        println!("{:?}", test.expected);
         for (i, b) in test.expected.iter().enumerate() {
             assert_eq!(instruction[i], test.expected[i], "Expected byte {} at position {} but got {} instead", b, i, instruction[i]);
         }

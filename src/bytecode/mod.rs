@@ -24,7 +24,7 @@ pub struct Definitions(HashMap<Opcode, Definition>);
 impl Definitions {
     pub fn new() -> Self {
         let mut map = HashMap::new();
-        map.insert(OpConstant, Definition { name: "OpConstant".to_string(), operand_widths: vec![0 as usize; 2] });
+        map.insert(OpConstant, Definition { name: "OpConstant".to_string(), operand_widths: vec![2 as usize] });
     
         Definitions(map)
     }
@@ -55,18 +55,21 @@ impl Definitions {
 
                     match width {
                         2 => {
-                            instruction[offset] = *operand as u16;
-                            BigEndian::from_slice_u16(&mut instruction);
+                            let o = *operand as u16;
+                            instruction[offset] = o.to_be();
                         },
                         _ => println!("Width: {}", width),
                     }
 
                     offset += width;
                 }
-
+                
                 Some(Instruction(instruction))
             },
-            None => None
+            None => {
+                println!("Couldn't find instruction for opcode {}", op);
+                None
+            }
         }
     }
 }

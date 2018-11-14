@@ -1,5 +1,5 @@
 use byteorder::ByteOrder;
-use byteorder::{BigEndian};
+use byteorder::{BigEndian, WriteBytesExt};
 use std::collections::HashMap;
 
 pub type Opcode = u16;
@@ -55,8 +55,9 @@ impl Definitions {
 
                     match width {
                         2 => {
-                            let o = *operand as u16;
-                            instruction[offset] = o.to_be();
+                            let mut wtr: Vec<u16> = vec![];
+                            wtr.write_u16::<BigEndian>(*operand as u16).unwrap();
+                            instruction.append(&mut wtr);
                         },
                         _ => println!("Width: {}", width),
                     }

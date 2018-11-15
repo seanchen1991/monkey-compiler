@@ -2,15 +2,15 @@ use byteorder::ByteOrder;
 use byteorder::{BigEndian, WriteBytesExt};
 use std::collections::HashMap;
 
-pub type Opcode = u16;
+pub type Opcode = u8;
 
 iota! {
     // Use iota here because we want opcodes values
     // to increment, but we don't care what values they are
-    const OpConstant: u16 = 1 << iota;
+    const OpConstant: u8 = 1 << iota;
 }
 
-pub struct Instruction(Vec<u16>);
+pub struct Instruction(Vec<u8>);
 
 #[derive(Debug, Hash)]
 pub struct Definition {
@@ -29,7 +29,7 @@ impl Definitions {
         Definitions(map)
     }
     
-    pub fn lookup(&self, op: u16) -> Option<&Definition> {
+    pub fn lookup(&self, op: u8) -> Option<&Definition> {
         let Definitions(map) = self;
 
         match map.get(&op) {
@@ -45,7 +45,7 @@ impl Definitions {
         match self.lookup(op) {
             Some(def) => {
                 let instruction_len: usize = def.operand_widths.iter().sum();
-                let mut instruction = vec![0 as u16; instruction_len + 1];
+                let mut instruction = vec![0 as u8; instruction_len + 1];
                 instruction[0] = op;
 
                 let mut offset = 1;
@@ -55,9 +55,12 @@ impl Definitions {
 
                     match width {
                         2 => {
-                            let mut wtr: Vec<u16> = vec![];
+                            let mut wtr = vec![];
                             wtr.write_u16::<BigEndian>(*operand as u16).unwrap();
                             instruction.append(&mut wtr);
+
+                            // HACK
+                            instruction.retain(|&x| x != 0);
                         },
                         _ => println!("Width: {}", width),
                     }

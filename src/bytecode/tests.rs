@@ -5,7 +5,7 @@ fn test_make_instruction() {
     struct Test {
         op: Opcode,
         operands: Vec<i64>,
-        expected: Vec<u16>,
+        expected: Vec<u8>,
     }
 
     let def = Definitions::new();

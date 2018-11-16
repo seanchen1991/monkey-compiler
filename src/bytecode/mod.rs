@@ -45,8 +45,7 @@ impl Definitions {
         match self.lookup(op) {
             Some(def) => {
                 let instruction_len: usize = def.operand_widths.iter().sum();
-                let mut instruction = vec![0 as u8; instruction_len + 1];
-                instruction[0] = op;
+                let mut instruction = vec![op];
 
                 let mut offset = 1;
 
@@ -55,12 +54,8 @@ impl Definitions {
 
                     match width {
                         2 => {
-                            let mut wtr = vec![];
-                            wtr.write_u16::<BigEndian>(*operand as u16).unwrap();
-                            instruction.append(&mut wtr);
-
-                            // HACK
-                            instruction.retain(|&x| x != 0);
+                            instruction.write_u16::<BigEndian>(*operand as u16).unwrap();
+                            instruction.truncate(instruction_len + 1);
                         },
                         _ => println!("Width: {}", width),
                     }

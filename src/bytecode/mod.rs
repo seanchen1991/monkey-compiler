@@ -1,6 +1,5 @@
-use byteorder::ByteOrder;
-use byteorder::{BigEndian, WriteBytesExt};
 use std::collections::HashMap;
+use byteorder::{BigEndian, WriteBytesExt};
 
 pub type Opcode = u8;
 
@@ -10,7 +9,14 @@ iota! {
     const OpConstant: u8 = 1 << iota;
 }
 
-pub struct Instruction(Vec<u8>);
+#[derive(Copy, Debug)]
+pub struct Instructions(Vec<u8>);
+
+impl Instructions {
+    pub fn new() -> Self {
+        Instructions(Vec::new())
+    }
+}
 
 #[derive(Debug, Hash)]
 pub struct Definition {
@@ -41,11 +47,11 @@ impl Definitions {
         }
     }
 
-    pub fn make_instruction(&self, op: Opcode, operands: &[i64]) -> Option<Instruction> {
+    pub fn make_instructions(&self, op: Opcode, operands: &[i64]) -> Option<Instructions> {
         match self.lookup(op) {
             Some(def) => {
                 let instruction_len: usize = def.operand_widths.iter().sum();
-                let mut instruction = vec![op];
+                let mut instructions = vec![op];
 
                 let mut offset = 1;
 
@@ -54,8 +60,8 @@ impl Definitions {
 
                     match width {
                         2 => {
-                            instruction.write_u16::<BigEndian>(*operand as u16).unwrap();
-                            instruction.truncate(instruction_len + 1);
+                            instructions.write_u16::<BigEndian>(*operand as u16).unwrap();
+                            instructions.truncate(instruction_len + offset);
                         },
                         _ => println!("Width: {}", width),
                     }
@@ -63,10 +69,10 @@ impl Definitions {
                     offset += width;
                 }
                 
-                Some(Instruction(instruction))
+                Some(Instructions(instructions))
             },
             None => {
-                println!("Couldn't find instruction for opcode {}", op);
+                println!("Couldn't find instructions for opcode {}", op);
                 None
             }
         }

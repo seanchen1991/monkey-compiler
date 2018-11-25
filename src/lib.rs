@@ -8,3 +8,5 @@ mod token;
 mod ast;
 mod parser;
 mod bytecode;
+mod object;
+mod compiler;

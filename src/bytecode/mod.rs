@@ -9,7 +9,6 @@ iota! {
     const OpConstant: u8 = 1 << iota;
 }
 
-#[derive(Copy, Debug)]
 pub struct Instructions(Vec<u8>);
 
 impl Instructions {

@@ -3,7 +3,6 @@ use object::*;
 use bytecode::*;
 use std::fmt;
 
-#[derive(Copy, Debug)]
 struct Bytecode {
     instructions: Instructions,
     constants: Vec<Object>,
@@ -13,6 +12,7 @@ struct Compiler {
     instructions: Instructions,
     constants: Vec<Object>,
 }
+
 #[derive(Debug)]
 struct CompilerError {
     message: String,
@@ -36,8 +36,8 @@ impl Compiler {
 
     pub fn bytecode(&mut self) -> Bytecode {
         Bytecode {
-            instructions: self.instructions.copy(),
-            constants: self.constants.copy(),
+            instructions: Instructions::new(),
+            constants: Vec::new(), 
         }
     }
 }

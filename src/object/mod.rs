@@ -5,7 +5,7 @@ use std::cell::RefCell;
 use std::hash::{Hash, Hasher};
 use std::collections::HashMap;
 
-#[derive(Copy, Hash, Eq, PartialEq, Clone, Debug)]
+#[derive(Hash, Eq, PartialEq, Clone, Debug)]
 pub enum Object {
     Int(i64),
     Bool(bool),
